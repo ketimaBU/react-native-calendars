@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   TouchableOpacity,
-  Text,
+  Text, View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -10,7 +10,7 @@ import {shouldUpdate} from '../../../component-updater';
 
 class Day extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     // TODO: disabled props should be removed
     state: PropTypes.oneOf(['selected', 'disabled', 'today', '']),
@@ -43,6 +43,7 @@ class Day extends Component {
   render() {
     let containerStyle = [this.style.base];
     let textStyle = [this.style.text];
+    const dotStyle = [this.style.dot];
 
     let marking = this.props.marking || {};
     if (marking && marking.constructor === Array && marking.length) {
@@ -51,14 +52,28 @@ class Day extends Component {
       };
     }
     const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
+    let dot;
+    if (marking.marked) {
+      dotStyle.push(this.style.visibleDot);
+      if (isDisabled) {
+        dotStyle.push(this.style.disabledDot);
+      }
+      if (marking.dotColor) {
+        dotStyle.push({backgroundColor: marking.dotColor});
+      }
+      dot = (marking.renderDot);
+    }
 
     if (marking.selected) {
       containerStyle.push(this.style.selected);
+      dotStyle.push(this.style.selectedDot);
+      textStyle.push(this.style.selectedText);
     } else if (isDisabled) {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
+      dotStyle.push(this.style.todayDot);
     }
 
     if (marking.customStyles && typeof marking.customStyles === 'object') {
@@ -84,6 +99,7 @@ class Day extends Component {
         disabled={marking.disableTouchEvent}
       >
         <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
+        {dot}
       </TouchableOpacity>
     );
   }

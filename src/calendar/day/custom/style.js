@@ -38,6 +38,27 @@ export default function styleConstructor(theme={}) {
     disabledText: {
       color: appStyle.textDisabledColor
     },
+    dot: {
+      width: 4,
+      height: 4,
+      marginTop: 1,
+      borderRadius: 2,
+      opacity: 0,
+      ...appStyle.dotStyle
+    },
+    visibleDot: {
+      opacity: 1,
+      backgroundColor: appStyle.dotColor
+    },
+    selectedDot: {
+      backgroundColor: appStyle.selectedDotColor
+    },
+    disabledDot: {
+      backgroundColor: appStyle.disabledDotColor || appStyle.dotColor
+    },
+    todayDot: {
+      backgroundColor: appStyle.todayDotColor || appStyle.dotColor
+    },
     ...(theme[STYLESHEET_ID] || {})
   });
 }
